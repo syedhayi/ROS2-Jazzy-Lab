@@ -2,12 +2,21 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.logging import get_logger
+from ros2_interfaces.msg import String
 
 class Counter_publisher_node_class(Node):
     def __init__(self) -> None:
         super().__init__("counter_publisher")
         self.get_logger().info(f"{self.get_name()} has been started!")
+        self.cnt_ = 0
+        self.publisher_ = self.create_publisher(String, "/counter", 10)
+        self.timer_ = self.create_timer(0.5, self.callback_timer)   #publishes every 0.5s
 
+    def callback_timer(self):
+        msg = String()
+        msg.data = f"Counter: {self.cnt_}"
+        self.publisher_.publish(msg)
+        self.get_logger().info(msg.data)
 
 def main(args=None) -> None:
     log = get_logger("System")
@@ -36,8 +45,6 @@ def main(args=None) -> None:
         if rclpy.ok():
             log.info("Manually shutting down the ROS2 Client...")
             rclpy.shutdown()
-
-
 
 if __name__ == '__main__':
     main()

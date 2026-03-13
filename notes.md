@@ -38,3 +38,65 @@ In the Subscriber, the `msg` variable is **not** declared in your class. Instead
 
 **Summary:** * Use `this->` for **Class Members** (Variables that stay with the node).
 * Do **NOT** use `this->` for **Function Arguments** (Data that is just passing through the function).
+
+---
+
+# 📡 ROS 2 Quality of Service (QoS) Deep Dive
+
+QoS is the "contract" between a Publisher and a Subscriber. It defines how data is handled by the middleware (DDS). If the contracts are incompatible, the nodes will not communicate.
+
+## 1. The Three "Big Knobs" (Policies)
+
+| Policy | Option A: Reliable (Default) | Option B: Best Effort (Sensor) |
+| :--- | :--- | :--- |
+| **Reliability** | **Reliable:** Guarantees delivery. It will re-send lost packets. | **Best Effort:** Fire and forget. It won't wait for confirmation. |
+| **Durability** | **Transient Local:** "Late-joiners" get the last sent message. | **Volatile:** "Late-joiners" only see messages sent *after* they joined. |
+| **History** | **Keep Last (X):** Keeps only the $X$ most recent messages. | **Keep All:** Keeps everything until the buffer is full (Risky). |
+
+---
+
+## 2. QoS Profile Comparison Table (Pre-configured Presets)
+
+ROS 2 provides "Presets"—pre-set configurations for the most common tasks:
+
+| Preset | Reliability | Durability | Best Use Case |
+| :--- | :--- | :--- | :--- |
+| `SensorDataQoS()` | **Best Effort** | Volatile | High-frequency data where losing a packet is okay. (LIDAR, IMU, Cameras). |
+| `ServicesQoS()` | **Reliable** | Volatile | One-time requests where losing a packet is NOT okay. (Open gripper, reset motor). |
+| `ParametersQoS()` | **Reliable** | **Transient Local** | Configuration values that nodes must remember. |
+| `SystemDefaultsQoS()` | Reliable* | Volatile | Standard topics (Default if only an integer is used). |
+
+---
+
+## ⚙️ QoS Configuration: Presets vs. Custom
+You have two ways to define a "Contract" in both C++ and Python:
+
+1. **Pre-configured Presets:** Best for 90% of use cases. 
+   * *Example:* `rclcpp::SensorDataQoS()` (C++) or `qos_profile_sensor_data` (Python).
+   * *Pro:* Guaranteed to use industry-standard settings for that data type.
+
+2. **Custom QoS Profiles:** Use this when you need to "mix and match" policies.
+   * *Example:* If you need **Best Effort** reliability but want to **Keep Last (100)** messages instead of the default 5.
+   * *Logic:* You create a QoS object, set the history depth, and then manually toggle the reliability or durability settings.
+
+> **Note:** Whether using a preset or a custom profile, the **Compatibility Rule** still applies: the Subscriber's requirements must be met by the Publisher's offerings.
+
+
+## 💡 Architectural Strategy
+
+### When to use Best Effort (`SensorDataQoS`)
+Use this for high-frequency streams. In robotics, **"old data is bad data."** If a packet is lost, it is better to skip it and move to the newest data rather than lagging the system to re-send a stale packet.
+
+### When to use Reliable (`ServicesQoS` / `Default`)
+Use this for commands. If you send a "Stop" command to a motor, you cannot afford to lose that packet. The system must ensure it arrives, even if it takes extra time to confirm delivery.
+
+### 🤝 Compatibility Rule
+QoS is a negotiation. The Subscriber "requests" a level of service, and the Publisher "offers" one. If the offer is lower than the request, the connection fails.
+
+| Publisher Offer | Subscriber Request | Connection Status |
+| :--- | :--- | :--- |
+| **Best Effort** | **Best Effort** | ✅ **Works** |
+| **Reliable** | **Best Effort** | ✅ **Works** (Sub gets better than it asked for) |
+| **Best Effort** | **Reliable** | ❌ **Fails** (Sub demands more than Pub gives) |
+
+> **Tip:** If your nodes are running but `ros2 topic echo` shows nothing, always check for a **Reliability** mismatch first!

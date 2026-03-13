@@ -42,7 +42,7 @@ add_executable(minimal_publisher src/cpp_minimal_publisher.cpp)
 # This tells the compiler where the "shared memory" and "string" code is
 ament_target_dependencies(minimal_publisher
   rclcpp
-
+  ros2_interfaces
 )
 
 # Step 3:. Installation logic

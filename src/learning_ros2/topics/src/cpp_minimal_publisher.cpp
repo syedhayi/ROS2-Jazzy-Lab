@@ -1,17 +1,32 @@
 #include "rclcpp/rclcpp.hpp"
-
+#include "ros2_interfaces/msg/string.hpp"
 
 using namespace std::chrono_literals;
+using String = ros2_interfaces::msg::String;
 
 class Counter_publisher_node_class : public rclcpp::Node{
     public:
-        Counter_publisher_node_class() : Node("counter_publisher"){
+        Counter_publisher_node_class() : Node("counter_publisher"), cnt_(0){
             RCLCPP_INFO(this->get_logger(), "%s has been started", this->get_name());
-
+            publisher_ = this->create_publisher<String>("/counter", 10);
+            timer_ = this->create_timer(500ms,
+                    [this]() -> void{this->callback_timer();}
+            );
+            msg = std::make_shared<String>();
         }
 
     private:
+        int cnt_;
+        rclcpp::Publisher<String>::SharedPtr publisher_;
+        rclcpp::TimerBase::SharedPtr timer_;
+        String::SharedPtr msg;
 
+        void callback_timer(){
+            msg->data = "Counter" + std::to_string(this->cnt_);
+            this->publisher_->publish(*msg);
+            RCLCPP_INFO(this->get_logger(), "%s", this->msg->data.c_str());
+            this->cnt_++;
+        }
 };
 
 

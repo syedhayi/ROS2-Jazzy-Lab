@@ -37,6 +37,7 @@ ament_python_install_package(${PROJECT_NAME})
 # Format: add_executable(target_name source_file)
 #Step 1: Create the Executable
 add_executable(minimal_publisher src/cpp_minimal_publisher.cpp)
+add_executable(minimal_subscriber src/cpp_minimal_subscriber.cpp)
 
 # Step 2: Link the Libraries
 # This tells the compiler where the "shared memory" and "string" code is
@@ -45,10 +46,16 @@ ament_target_dependencies(minimal_publisher
   ros2_interfaces
 )
 
+ament_target_dependencies(minimal_subscriber
+  rclcpp
+  ros2_interfaces
+)
+
 # Step 3:. Installation logic
 # Without this, 'ros2 run' will say the package is found but the node is missing
 install(TARGETS
   minimal_publisher
+  minimal_subscriber
 
   DESTINATION lib/${PROJECT_NAME})
 

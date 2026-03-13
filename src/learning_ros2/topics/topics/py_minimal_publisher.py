@@ -17,6 +17,7 @@ class Counter_publisher_node_class(Node):
         msg.data = f"Counter: {self.cnt_}"
         self.publisher_.publish(msg)
         self.get_logger().info(msg.data)
+        self.cnt_ += 1
 
 def main(args=None) -> None:
     log = get_logger("System")

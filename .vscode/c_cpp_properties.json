@@ -7,7 +7,6 @@
       },
       "includePath": [
         "/opt/ros/jazzy/include/**",
-        "/root/ros2_ws/src/learning_ros2/topics/include/**",
         "/usr/include/**",
         "/root/ros2_ws/install/ros2_interfaces/include/**"
       ],

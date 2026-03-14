@@ -13,11 +13,12 @@ class Counter_publisher_node_class : public rclcpp::Node{
                 "/counter", 
                 rclcpp::SensorDataQoS() // Optimized for speed over reliability
             );
-            
+
+            // Pre-allocate the message memory before creating the timer that uses it.
+            msg = std::make_shared<String>();
             timer_ = this->create_timer(500ms,
                     [this]() -> void{this->callback_timer();}
             );
-            msg = std::make_shared<String>();
         }
 
     private:

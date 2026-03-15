@@ -14,6 +14,7 @@ class Greeting_server_node_class(Node):
         self.get_logger().info(f'Incoming request: "{request.greetings}"')
         response.response_greetings = f'Hello from {self.get_name()}'
         self.get_logger().info(f'Sending response: "{response.response_greetings}"')
+        
         return response
     
 def main(args=None) -> None:

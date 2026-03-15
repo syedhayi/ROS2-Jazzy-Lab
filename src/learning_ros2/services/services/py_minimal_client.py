@@ -26,8 +26,11 @@ class Greeting_client_node_class(Node):
     def response_callback(self, future):
         try:
             response: Greetings.Response = future.result()
-            self.get_logger().info(f'Received response: "{response.response_greetings}"')
-            
+            if response.success:
+                self.get_logger().info(f'Received response: "{response.response_greetings}"')
+            else:
+                self.get_logger().error(f'Service call failed: {response.response_greetings}')
+                
         except Exception as e:
             self.get_logger().error(f'Service call failed: {e}')
 

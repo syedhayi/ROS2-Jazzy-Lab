@@ -11,10 +11,20 @@ class Greeting_server_node_class(Node):
         self.service_ = self.create_service(Greetings, "greetings", self.greetings_callback)
 
     def greetings_callback(self, request: Greetings.Request, response: Greetings.Response):
-        self.get_logger().info(f'Incoming request: "{request.greetings}"')
-        response.response_greetings = f'Hello from {self.get_name()}'
-        self.get_logger().info(f'Sending response: "{response.response_greetings}"')
-        a = 10/0
+        try:
+            self.get_logger().info(f'Incoming request: "{request.greetings}"')
+            # This is where the actual work would happen. We simulate an error.
+            a = 10/0
+            response.response_greetings = f'Hello from {self.get_name()}'
+            response.success = True
+            self.get_logger().info(f'Sending response: "{response.response_greetings}"')
+            
+        except Exception as e:
+            self.get_logger().error(f"An error occurred in the service callback: {e}")
+            # Populate the response with an error message instead of crashing.
+            response.response_greetings = "Error: Service failed to process request."
+            response.success = False
+
         return response
     
 def main(args=None) -> None:

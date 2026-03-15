@@ -1,3 +1,4 @@
 string greetings        # The input sent by the client
 ---
 string response_greetings # The response sent by the server
+bool success

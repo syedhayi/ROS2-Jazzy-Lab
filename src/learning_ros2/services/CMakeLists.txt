@@ -31,14 +31,20 @@ ament_python_install_package(${PROJECT_NAME})
 # ________________________________CPP________________________________________________
 
 add_executable(cpp_minimal_server src/cpp_minimal_server.cpp)
+add_executable(cpp_minimal_client src/cpp_minimal_client.cpp)
 
 ament_target_dependencies(cpp_minimal_server
   rclcpp
   ros2_interfaces
 )
 
+ament_target_dependencies(cpp_minimal_client
+  rclcpp
+  ros2_interfaces
+)
+
 install(TARGETS
-  cpp_minimal_server
+  cpp_minimal_client
   DESTINATION lib/${PROJECT_NAME}
 )
 

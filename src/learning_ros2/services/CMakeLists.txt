@@ -44,6 +44,7 @@ ament_target_dependencies(cpp_minimal_client
 )
 
 install(TARGETS
+  cpp_minimal_server
   cpp_minimal_client
   DESTINATION lib/${PROJECT_NAME}
 )

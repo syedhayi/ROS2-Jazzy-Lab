@@ -6,5 +6,6 @@ log/
 # VS Code C++ Extension cache (SQLite databases)
 .vscode/*.db*
 flowcharts/
+.gemini/
 .gitignore
 no_gpu_projects.md

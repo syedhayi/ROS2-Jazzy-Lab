@@ -10,17 +10,17 @@ class cntReset_server_node_class(Node):
     def __init__(self) -> None:
         super().__init__("cntReset_server")
         self.get_logger().info(f"{self.get_name()} has been started!")
-        self.publisher_ = self.create_publisher(String, '/counter', 10)
         self.cnt_ = 0
+        self.msg_ = String()  # Create message object once
+        self.publisher_ = self.create_publisher(String, '/counter', 10)
         self.service_ = self.create_service(ResetCounter, 'cntReset', self.cntReset_callback)
         self.timer_ = self.create_timer(0.5, self.timer_callback)
         
 
     def timer_callback(self):
-        msg = String()
-        msg.data = f"Counter: {self.cnt_}"
-        self.publisher_.publish(msg)
-        self.get_logger().info(f'Publishing: "{msg.data}"') 
+        self.msg_.data = f"Counter: {self.cnt_}"
+        self.publisher_.publish(self.msg_)
+        self.get_logger().info(f'Publishing: "{self.msg_.data}"') 
         self.cnt_ += 1
 
     def cntReset_callback(self, request: ResetCounter.Request, response: ResetCounter.Response):

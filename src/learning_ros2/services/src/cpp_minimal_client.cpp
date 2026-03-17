@@ -26,13 +26,15 @@ class Greeting_client_node_class : public rclcpp::Node{
         }
         
         void send_request(const std::string &value){
-            if(!this->client_->service_is_ready()){
-                RCLCPP_WARN(this->get_logger(), "Service is not found. Waiting for Service server...");
-                return;
-            }
+            if(this->client_->service_is_ready()){
                 this->request->greetings = value;
                 this->client_->async_send_request(this->request,
                 [this](rclcpp::Client<Greetings>::SharedFuture future) -> void { this->response_callback(future); });
+            }
+            else{
+                RCLCPP_WARN(this->get_logger(), "Service is not found. Waiting for Service server...");
+            }
+                
         }
 
         

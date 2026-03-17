@@ -1,0 +1,41 @@
+<mxfile host="embed.diagrams.net" modified="2026-03-17T09:10:00.000Z" agent="Gemini Code Assist" version="20.8.23" type="embed">
+  <diagram id="py-server" name="Python Service Server Flow">
+    <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ps-main" value="Main Execution" style="text;fontStyle=1;fontSize=14;align=center;" vertex="1" parent="1"><mxGeometry x="60" y="20" width="160" height="30" as="geometry" /></mxCell>
+        <mxCell id="ps-init" value="Node Initialization" style="text;fontStyle=1;fontSize=14;align=center;" vertex="1" parent="1"><mxGeometry x="360" y="20" width="160" height="30" as="geometry" /></mxCell>
+        <mxCell id="ps-call" value="Service Callback" style="text;fontStyle=1;fontSize=14;align=center;" vertex="1" parent="1"><mxGeometry x="660" y="20" width="280" height="30" as="geometry" /></mxCell>
+
+        <!-- Main -->
+        <mxCell id="ps-m1" value="Start main()" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="80" y="80" width="100" height="60" as="geometry" /></mxCell>
+        <mxCell id="ps-m2" value="rclpy.init()" style="rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="60" y="180" width="140" height="60" as="geometry" /></mxCell>
+        <mxCell id="ps-m3" value="Node()" style="rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="60" y="280" width="140" height="60" as="geometry" /></mxCell>
+        <mxCell id="ps-m4" value="rclpy.spin(node)" style="rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="60" y="380" width="140" height="60" as="geometry" /></mxCell>
+        <mxCell id="ps-m6" value="rclpy.shutdown()" style="rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="60" y="480" width="140" height="60" as="geometry" /></mxCell>
+
+        <mxCell id="arr-ps-1" edge="1" parent="1" source="ps-m1" target="ps-m2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="arr-ps-2" edge="1" parent="1" source="ps-m2" target="ps-m3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="arr-ps-3" edge="1" parent="1" source="ps-m3" target="ps-m4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="arr-ps-4" edge="1" parent="1" source="ps-m4" target="ps-m6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Init -->
+        <mxCell id="ps-i1" value="Start __init__" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="380" y="80" width="100" height="60" as="geometry" /></mxCell>
+        <mxCell id="ps-i3" value="create_service&lt;br&gt;&quot;greetings&quot;" style="rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="360" y="180" width="140" height="60" as="geometry" /></mxCell>
+
+        <mxCell id="arr-ps-5" edge="1" parent="1" source="ps-m3" target="ps-i1" style="edgeStyle=orthogonalEdgeStyle;dashed=1;html=1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="arr-ps-6" edge="1" parent="1" source="ps-i1" target="ps-i3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Callback -->
+        <mxCell id="ps-c1" value="Client Requests&lt;br&gt;(Receives Req/Res)" style="ellipse;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="670" y="80" width="140" height="60" as="geometry" /></mxCell>
+        <mxCell id="ps-c3" value="response.greeting =&lt;br&gt;...&lt;br&gt;response.success=True" style="rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="660" y="180" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="ps-c5" value="return response" style="ellipse;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="680" y="280" width="120" height="60" as="geometry" /></mxCell>
+
+        <mxCell id="arr-ps-7" value="Triggered by Request" edge="1" parent="1" source="ps-i3" target="ps-c1" style="edgeStyle=orthogonalEdgeStyle;dashed=1;html=1;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="550" y="210"/><mxPoint x="550" y="110"/></Array></mxGeometry></mxCell>
+        <mxCell id="arr-ps-8" edge="1" parent="1" source="ps-c1" target="ps-c3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="arr-ps-9" edge="1" parent="1" source="ps-c3" target="ps-c5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

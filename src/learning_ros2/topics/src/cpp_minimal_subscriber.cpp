@@ -6,7 +6,7 @@ using String = ros2_interfaces::msg::String;
 
 class Counter_subscriber_node_class : public rclcpp::Node{
     public:
-        Counter_subscriber_node_class() : Node("counter_subscriber"), cnt_(0){
+        Counter_subscriber_node_class() : Node("counter_subscriber"){
             RCLCPP_INFO(this->get_logger(), "%s has been started", this->get_name());
             // subscriber_ = this->create_subscription<String>("/counter", 10,
             //         [this](const String::SharedPtr msg) -> void{this->callback_subscriber(msg);}

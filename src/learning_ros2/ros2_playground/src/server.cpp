@@ -10,7 +10,7 @@ using Trigger = ros2_interfaces::srv::Trigger;
 
 class Counter_server_node_class : public rclcpp::Node{
     public: 
-        Counter_server_node_class() : Node("resetCounter_node"), cnt_(0){
+        Counter_server_node_class() : Node("counter_service_node"), cnt_(0){
             RCLCPP_INFO(this->get_logger(), "%s has been started!", this->get_name());
             //topics
             publisher_ = this->create_publisher<String>("/counter", 10);
@@ -36,6 +36,7 @@ class Counter_server_node_class : public rclcpp::Node{
     private:
         int cnt_;
         String::SharedPtr msg_cnt;
+        int8_t inc_dec_val = 1;
         rclcpp::Publisher<String>::SharedPtr publisher_;
         rclcpp::TimerBase::SharedPtr timer_;
         rclcpp::Service<ResetCounter>::SharedPtr service_;
@@ -45,7 +46,11 @@ class Counter_server_node_class : public rclcpp::Node{
             this->msg_cnt->data = "Counter: " + std::to_string(this->cnt_);
             this->publisher_->publish(*msg_cnt);
             RCLCPP_INFO(this->get_logger(), "%s", this->msg_cnt->data.c_str());
-            this->cnt_++;
+            // this->cnt_++;
+            this->cnt_ += this->inc_dec_val;
+
+            //flip the sign if cnt_ is a multiple of 10
+            this->inc_dec_val = (this->cnt_ % 10 == 0) ? -this->inc_dec_val : this->inc_dec_val;
         }
         void resetCounter_callback(const ResetCounter::Request::SharedPtr request,
                     ResetCounter::Response::SharedPtr response){

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(ros2_interfaces)
+project(actions)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,31 +7,9 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
-
-# --------------------------------------------------------
-find_package(rosidl_default_generators REQUIRED) 
-rosidl_generate_interfaces(${PROJECT_NAME} 
-# we will add the name of our custom interfaces here 
-  "msg/HardwareStatus.msg"
-  "msg/String.msg"
-
-  "srv/Greetings.srv"
-  "srv/Trigger.srv"
-  "srv/ResetCounter.srv"
-  "srv/String.srv"
-
-  "action/Counter.action"
-) 
-ament_export_dependencies(rosidl_default_runtime)
-
-# --------------------------------------------------------
-
-
-
-
+find_package(rclpy REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(ros2_interfaces REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

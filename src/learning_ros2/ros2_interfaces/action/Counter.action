@@ -1,0 +1,8 @@
+# The goal is the number to count up to
+int32 target_number
+---
+# The result is the final sequence of numbers
+int32[] final_sequence
+---
+# The feedback is the partial sequence as it's being built
+int32[] current_sequence
